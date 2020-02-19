@@ -1,6 +1,6 @@
 @extends('layouts.website')
-@section('title', e($page->tagTitle))
-@section('description', e($page->tagMetaDescription))
+@section('title', $page->tagTitle)
+@section('description', $page->tagMetaDescription)
 
 @section('content')
 
