@@ -34,7 +34,7 @@ Route::group(
                 ]);
                 Route::get('success', array(
                     'as'     => 'contact.success',
-                    'uses' => 'ContactController@success'
+                    'uses' => 'ContactController@index'
                 ));
                 Route::post('', array(
                     'as'     => 'contact.send',

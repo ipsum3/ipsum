@@ -29,9 +29,4 @@ class ContactController extends Controller
         return redirect()->route('contact.success');
     }
 
-    public function success()
-    {
-        return $this->index();
-    }
-
 }
