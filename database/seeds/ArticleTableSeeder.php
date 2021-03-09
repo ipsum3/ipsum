@@ -55,6 +55,12 @@ class ArticleTableSeeder extends Seeder
                 'type' => Article::TYPE_PAGE,
             ),
             array(
+                'slug' => 'blog',
+                'titre' => 'Blog',
+                'nom' => 'Blog',
+                'type' => Article::TYPE_PAGE,
+            ),
+            array(
                 'slug' => 'mentions-legales',
                 'titre' => 'Mentions légales',
                 'nom' => 'Mentions légales',

@@ -20,7 +20,7 @@ class ArticleController extends Controller
 
     public function blogIndex()
     {
-        $page = Article::where('nom', 'Accueil')->firstOrFail();
+        $page = Article::where('nom', 'Blog')->firstOrFail();
         $articles = Article::posts()->with('illustration')->publie()->orderBy('created_at', 'desc')->paginate(21);
 
         return view('article.blog.liste', compact('page', 'articles'));
