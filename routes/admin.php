@@ -2,7 +2,6 @@
 
 Route::group(
     [
-        'middleware' => ['web'],
         'namespace' => '\App\Http\Controllers\Admin'
     ],
     function() {

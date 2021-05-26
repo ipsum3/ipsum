@@ -14,7 +14,7 @@ Auth::routes();
 
 Route::group(
     [
-        'namespace' => '\App\Http\Controllers',
+
     ],
     function() {
         Route::get('/', [
@@ -72,5 +72,3 @@ Route::group(
         ));
     }
 );
-
-include('admin.php');
