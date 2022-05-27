@@ -12,7 +12,7 @@ return [
         ]
     ],
     [
-        'title' => 'Site',
+        'title' => 'Modules',
         'sections' => [
             [
                 'title' => 'Articles',
@@ -39,23 +39,7 @@ return [
                         'url_prefix' => '/article/categorie*'
                     ]
                 ]
-            ],
-            [
-                'title' => 'Médias',
-                'icon' => 'fas fa-camera',
-                'submenus' => [
-                    [
-                        'text' => 'Bibliothéque',
-                        'route' => ['admin.media.index'],
-                        'url_prefix' => '/media*'
-                    ],
-                    [
-                        'text' => "Ajouter",
-                        'route' => ['admin.media.create', 'post'],
-                        'url_prefix' => '/media/create'
-                    ],
-                ]
-            ],
+            ]
         ]
     ],
     [

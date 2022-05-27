@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,65 +12,35 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
 
-Route::group(
-    [
-
-    ],
+Route::group([],
     function() {
+
         Route::get('/', [
-            'as' => 'home',
-            'uses' => 'ArticleController@home'
-        ]);
+            \App\Http\Controllers\ArticleController::class, 'home'
+        ])->name('home');
 
 
-        Route::group(
-            array(
-                'prefix' => 'contact',
-            ),
+        Route::controller(\App\Http\Controllers\ContactController::class)->prefix('contact')->name('contact.')->group(
             function () {
-                Route::get('', [
-                    'as'     => 'contact.index',
-                    'uses' => 'ContactController@index'
-                ]);
-                Route::get('success', array(
-                    'as'     => 'contact.success',
-                    'uses' => 'ContactController@index'
-                ));
-                Route::post('', array(
-                    'as'     => 'contact.send',
-                    'uses' => 'ContactController@send'
-                ));
+                Route::get('', 'index')->name('index');
+                Route::get('success', 'index')->name('success');
+                Route::post('', 'send')->name('send');
             }
         );
 
-
-        Route::group(
-            array(
-                'prefix' => 'blog',
-            ),
+        Route::controller(\App\Http\Controllers\ArticleController::class)->prefix('blog')->name('blog.')->group(
             function () {
-                Route::get('', array(
-                    'as'     => 'blog.index',
-                    'uses' => 'ArticleController@blogIndex'
-                ));
-                Route::get('categorie/{slug}', array(
-                    'as'     => 'blog.category',
-                    'uses' => 'ArticleController@blogCategorie'
-                ));
-                Route::get('{slug}', array(
-                    'as'     => 'blog.show',
-                    'uses' => 'ArticleController@blogDetail'
-                ));
+                Route::get('', 'blogIndex')->name('index');
+                Route::get('categorie/{slug}', 'blogCategorie')->name('category');
+                Route::get('{slug}', 'blogDetail')->name('show');
             }
         );
 
 
         // Catch all route : à mettre en dernier
-        Route::get('{slug}', array(
-            'as'     => 'article',
-            'uses' => 'ArticleController@index'
-        ));
+        Route::get('{slug}', [
+            \App\Http\Controllers\ArticleController::class, 'index'
+        ])->name('article');
     }
 );

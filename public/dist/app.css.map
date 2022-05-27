@@ -1,0 +1,1 @@
+{"version":3,"file":"dist/app.css","mappings":"AAAA,KACI,iBACA,UACJ,C","sources":["webpack:///./resources/scss/app.scss"],"sourcesContent":["body {\n    background: green;\n    color: white;\n}\n"],"names":[],"sourceRoot":""}

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <title>@yield('title') -  {{{ config('settings.nom_site') }}}</title>
     <meta name="description" content="@yield('description')" />
-
+    <link rel="stylesheet" href="{{ mix('dist/app.css') }}">
 
 </head>
 

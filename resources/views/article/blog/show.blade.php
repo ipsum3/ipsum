@@ -1,6 +1,6 @@
 @extends('layouts.website')
-@section('title', $article->tagTitle)
-@section('description', $article->tagMetaDescription)
+@section('title', $article->tag_title)
+@section('description', $article->tag_meta_description)
 
 @section('content')
 
@@ -21,7 +21,7 @@
                     <div class="col-lg-10 offset-lg-1">
                         <div class="wysiwyg-wp">
                             @if ($article->illustration)
-                                <img src="{{ Croppa::url($article->illustration->cropPath, 1200, 600) }}" class="img-center" alt="{{ $article->illustration->tagAlt }}" />
+                                <img src="{{ Croppa::url($article->illustration->crop_path, 1200, 600) }}" class="img-center" alt="{{ $article->illustration->tag_alt }}" />
                             @endif
                             @if ($article->extrait)
                             <p class="headline">{!! $article->extrait !!}</p>
