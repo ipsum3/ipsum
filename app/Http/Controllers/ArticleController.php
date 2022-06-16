@@ -9,11 +9,8 @@ use Ipsum\Article\app\Models\Article;
 class ArticleController extends Controller
 {
 
-    public function index($slug)
+    public function index(Article $article)
     {
-        $article = Article::where('slug', $slug)->firstOrFail();
-
-
          return view('article.show', compact('article'));
     }
 

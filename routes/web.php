@@ -33,7 +33,7 @@ Route::group([],
             function () {
                 Route::get('', 'blogIndex')->name('index');
                 Route::get('categorie/{slug}', 'blogCategorie')->name('category');
-                Route::get('{slug}', 'blogDetail')->name('show');
+                Route::get('{article:slug}', 'blogDetail')->name('show');
             }
         );
 
