@@ -39,7 +39,7 @@ Route::group([],
 
 
         // Catch all route : à mettre en dernier
-        Route::get('{slug}', [
+        Route::get('{article:slug}', [
             \App\Http\Controllers\ArticleController::class, 'index'
         ])->name('article');
     }
