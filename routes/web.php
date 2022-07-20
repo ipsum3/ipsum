@@ -32,7 +32,7 @@ Route::group([],
         Route::controller(\App\Http\Controllers\ArticleController::class)->prefix('blog')->name('blog.')->group(
             function () {
                 Route::get('', 'blogIndex')->name('index');
-                Route::get('categorie/{slug}', 'blogCategorie')->name('category');
+                Route::get('categorie/{categorie:slug}', 'blogCategorie')->name('category');
                 Route::get('{article:slug}', 'blogDetail')->name('show');
             }
         );
