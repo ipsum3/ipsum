@@ -1,144 +1,218 @@
-@servers(['web' => 'root@XXXXXX'])
+{{--
+ Commande =>   envoy run deploy --env=prod
+
+# .env
+
+DEPLOY_USER=XXX
+DEPLOY_SERVER=XXX.com
+DEPLOY_BASE_DIR_PROD=/home/XXXX/site
+DEPLOY_BASE_DIR_TEST=/home/XXXX/XXXXX/site
+DEPLOY_PHP_VERSION=8.1
+DEPLOY_DEPOT=ssh://XXX/XXX
+
+# Exemple
+https://adrien.poupa.net/zero-downtime-laravel-deployments-with-laravel-envoy/
+--}}
 
 @setup
-$user = 'XXXXXX';
-$depot = 'ssh://git@XXXXXX:2323/XXXXXX';
-$depot_remote = 'git@XXXXXX -p 2323';
 
-$php_version = '8.1';
+    require __DIR__.'/vendor/autoload.php';
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    try {
+        $dotenv->load();
+        $dotenv->required(['DEPLOY_USER', 'DEPLOY_SERVER', 'DEPLOY_BASE_DIR_PROD', 'DEPLOY_PHP_VERSION', 'DEPLOY_DEPOT'])->notEmpty();
+    } catch ( Exception $e )  {
+        echo $e->getMessage();
+        die();
+    }
 
-$dirlinks = ['storage'];
-$filelinks = ['.env'];
+    $user = env('DEPLOY_USER');
+    $depot = env('DEPLOY_DEPOT');
 
-$releases = 3;
+    $php_version = env('DEPLOY_PHP_VERSION');
 
-if ($env == null) {
-echo 'Paramètre --env obligatoire';
-die();
-} elseif ($env == 'prod') {
-$dir = "/home/$user/site";
-} else {
-$dir = "/home/$user/domains/test.$user/site";
-}
+    $dirlinks = ['storage', 'public/uploads'];
+    $filelinks = ['.env'];
 
-$dir = "/home/$user/site";
+    $releases = 3;
 
-$shared = $dir . '/shared';
-$current = $dir . '/current';
-$release = $dir . "/releases/" . date('YmdHis');
+
+    if ($env == null) {
+        throw new Exception('--env  must be specified');
+	} elseif ($env === 'prod') {
+        $branche = 'master';
+        $dir = env('DEPLOY_BASE_DIR_PROD');
+    } else {
+        $branche = $env;
+        $dir = env('DEPLOY_BASE_DIR_'.strtoupper($env));
+        if ($dir === null) {
+            throw new Exception('env '.'DEPLOY_BASE_DIR_'.strtoupper($env).' must be specified');
+        }
+    }
+
+    $shared = $dir . '/shared';
+    $current = $dir . '/current';
+    $release = $dir . "/releases/" . date('YmdHis');
+
+
+    function logMessage($message) {
+        return "echo '\033[32m" .$message. "\033[0m';\n";
+    }
 
 @endsetup
 
+@servers(['web' => 'root@'.env('DEPLOY_SERVER')])
+
 @story('deploy')
-createrelease
-composer
-links
-laravel
-linkcurrent
+    createrelease
 @endstory
 
 
 @task('prepare')
-mkdir -p /home/{{ $user }}/.ssh;
-chown {{ $user }}:{{ $user }} /home/{{ $user }}/.ssh;
-cp /root/.ssh/id_rsa /home/{{ $user }}/.ssh;
-chown  {{ $user }}:{{ $user }} /home/{{ $user }}/.ssh/id_rsa;
 
-su - {{ $user }};
+    {{ logMessage("######## prepare ########") }}
 
-mkdir -p {{ $shared }};
+    {{-- Gestion connexion ssh --}}
+    mkdir -p /home/{{ $user }}/.ssh;
+    chown {{ $user }}:{{ $user }} /home/{{ $user }}/.ssh;
+    cp /root/.ssh/id_rsa /home/{{ $user }}/.ssh;
+    chown  {{ $user }}:{{ $user }} /home/{{ $user }}/.ssh/id_rsa;
+    cp /root/.ssh/known_hosts /home/{{ $user }}/.ssh;
+    chown  {{ $user }}:{{ $user }} /home/{{ $user }}/.ssh/known_hosts;
 
-cd {{ $dir }}
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php composer-setup.php
-php -r "unlink('composer-setup.php');"
+    {{-- autre possibilité pour ajout known_hosts
+    ssh -o StrictHostKeyChecking=no {{ $depot_remote }} --}}
 
-ssh -o StrictHostKeyChecking=no {{ $depot_remote }}
+    su - {{ $user }};
+
+    {{-- Création des répertoires --}}
+    mkdir -p {{ $shared }};
+
+    cd {{ $dir }}
+
+    {{-- installation de composer en local pour pallier au problème de version de php --}}
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    php composer-setup.php
+    php -r "unlink('composer-setup.php');"
+
 @endtask
 
 
 @task('createrelease')
-echo '######## createrelease ########';
 
-su - {{ $user }};
-
-mkdir -p {{ $release }};
-
-git archive master --remote {{ $depot }} | tar -x -C {{ $release }};
-@endtask
+    if [ ! -d {{ $shared }} ]; then
+        {{ logMessage("Dossier ".$current." absent => envoy run prepare") }}
+        exit 0;
+    fi
 
 
-@task('composer')
-echo '######## composer install ########';
+    {{ logMessage("######## createrelease ########") }}
 
-su - {{ $user }};
+    su - {{ $user }};
 
-mkdir -p {{ $shared }}/vendor;
-ln -s {{ $shared }}/vendor {{ $release }}/vendor;
-cd {{ $release }};
-php{{ $php_version }} {{ $dir }}/composer.phar install --no-dev --no-progress;
-@endtask
+    mkdir -p {{ $release }};
 
-@task('links')
-echo '######## links ########';
-su - {{ $user }};
+    git archive {{ $branche }} --remote {{ $depot }} | tar -x -C {{ $release }};
 
-@foreach($dirlinks as $link)
 
-    @if ($link == 'storage')
-        php -r "if (!file_exists('{{ $shared }}/storage')) {
-        exec('mv {{ $release }}/storage {{ $shared }}');
-        } else {
-        exec('rm -rf {{ $release }}/storage');
-        }";
-    @else
-        mkdir -p {{ $shared }}/{{ $link }};
-        @if(strpos($link, '/'))
-            mkdir -p {{ $release }}/{{ dirname($link) }};
+    {{ logMessage("######## composer install ########") }}
+
+
+    mkdir -p {{ $shared }}/vendor;
+    ln -s {{ $shared }}/vendor {{ $release }}/vendor;
+    cd {{ $release }};
+    php{{ $php_version }} {{ $dir }}/composer.phar install --no-dev --no-progress;
+
+
+
+
+    {{ logMessage("######## Vérification .env ########") }}
+
+    has_env=true;
+    if [ ! -f {{ $shared }}/.env ]; then
+        cp {{ $release }}/.env.example {{ $shared }}/.env
+        {{ logMessage("Fichier .env à renseigner => envoy run init") }}
+        has_env=false;
+    fi
+    {{--php -r "if (!file_exists('.env')) { copy('{{ $release }}/.env.example', '.env'); }"--}}
+
+
+
+    {{ logMessage("######## links ########") }}
+
+    @foreach($dirlinks as $link)
+
+        @if ($link == 'storage')
+            php -r "if (!file_exists('{{ $shared }}/storage')) {
+                exec('mv {{ $release }}/storage {{ $shared }}');
+            } else {
+                exec('rm -rf {{ $release }}/storage');
+            }";
+        @else
+            mkdir -p {{ $shared }}/{{ $link }};
+            @if(strpos($link, '/'))
+                mkdir -p {{ $release }}/{{ dirname($link) }};
+            @endif
         @endif
-    @endif
-    ln -s {{ $shared }}/{{ $link }} {{ $release }}/{{ $link }};
-@endforeach
-@foreach($filelinks as $link)
-    ln -s {{ $shared }}/{{ $link }} {{ $release }}/{{ $link }};
-@endforeach
-
-@endtask
-
-@task('laravel')
-echo '######## laravel ########';
-
-su - {{ $user }};
+        ln -s {{ $shared }}/{{ $link }} {{ $release }}/{{ $link }};
+    @endforeach
+    @foreach($filelinks as $link)
+        ln -s {{ $shared }}/{{ $link }} {{ $release }}/{{ $link }};
+    @endforeach
 
 
-cd {{ $release }}
-php -r "if (!file_exists('.env')) { copy('{{ $release }}/.env.example', '.env'); }"
 
-php{{ $php_version }} artisan storage:link
-php{{ $php_version }} artisan migrate --force
-php{{ $php_version }} artisan cache:clear
+    if [ $has_env = true ]; then
+
+        {{ logMessage("######## Laravel ########") }}
+
+        cd {{ $release }}
+        {{--php{{ $php_version }} artisan storage:link--}}
+        php{{ $php_version }} artisan migrate --force
+
+        {{--https://laravel.com/docs/9.x/deployment--}}
+        php{{ $php_version }} artisan config:cache --quiet
+        php{{ $php_version }} artisan view:cache --quiet
+        php{{ $php_version }} artisan route:cache --quiet {{-- application avec beaucoup de route --}}
 
 
-{{--TODO
-php artisan db:seed
-php artisan key:generate--}}
-@endtask
+    fi
 
-@task('linkcurrent')
-echo '######## linkcurrent ########';
+    {{ logMessage("######## linkcurrent ########") }}
 
-su - {{ $user }};
 
-rm -f {{ $current }};
-ln -s {{ $release }} {{ $current }};
-ls {{ $dir }}/releases | sort -r | tail -n +{{ $releases + 1 }} | xargs -I{} -r rm -rf {{ $dir }}/releases/{};
-echo "Lien // {{ $current }} --> {{ $release }}";
+    rm -f {{ $current }};
+    ln -s {{ $release }} {{ $current }};
+    ls {{ $dir }}/releases | sort -r | tail -n +{{ $releases + 1 }} | xargs -I{} -r rm -rf {{ $dir }}/releases/{};
+
+    exit;
+    {{--Problème avec le lien symbolique current mis en cache par apache ou php --}}
+    /etc/init.d/apache2 reload;
+
+    echo "Lien // {{ $current }} --> {{ $release }}";
+
 @endtask
 
 
 @task('rollback')
-rm -f {{ $current }};
-ls {{ $dir }}/releases | tail -n 2 | head -n 1 | xargs -I{} -r ln -s {{ $dir }}/releases/{} {{ $current }};
+    rm -f {{ $current }};
+    ls {{ $dir }}/releases | tail -n 2 | head -n 1 | xargs -I{} -r ln -s {{ $dir }}/releases/{} {{ $current }};
 
-{{--TODO composer + migration --}}
+    {{--TODO composer + migration --}}
+@endtask
+
+
+
+@task('init', ['confirm' => true])
+    {{ logMessage("######## init ########") }}
+
+    su - {{ $user }};
+    cd {{ $current }}
+
+    php{{ $php_version }} artisan key:generate --quiet
+    php{{ $php_version }} artisan route:clear --quiet
+    php{{ $php_version }} artisan config:cache --quiet
+
+    php{{ $php_version }} artisan migrate --force
+    php{{ $php_version }} artisan db:seed --force
 @endtask
