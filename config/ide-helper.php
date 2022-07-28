@@ -140,6 +140,10 @@ return [
 
     'model_locations' => [
         'app',
+        'vendor/ipsum3/core/src/app/Models',
+        'vendor/ipsum3/admin/src/app/Models',
+        'vendor/ipsum3/article/src/app/Models',
+        'vendor/ipsum3/media/src/app/Models',
     ],
 
     /*
