@@ -9,7 +9,7 @@ return [
                 'route' => ['admin.dashboard'],
                 'url_prefix' => '',
             ],
-        ]
+        ],
     ],
     [
         'title' => 'Modules',
@@ -21,26 +21,26 @@ return [
                     [
                         'text' => 'Blog',
                         'route' => ['admin.article.index', 'post'],
-                        'url_prefix' => '/article/post*'
+                        'url_prefix' => '/article/post*',
                     ],
                     [
-                        'text' => "Ajouter un post",
+                        'text' => 'Ajouter un post',
                         'route' => ['admin.article.create', 'post'],
-                        'url_prefix' => '/article/post/create'
+                        'url_prefix' => '/article/post/create',
                     ],
                     [
                         'text' => 'Pages',
                         'route' => ['admin.article.index', 'page'],
-                        'url_prefix' => '/article/page*'
+                        'url_prefix' => '/article/page*',
                     ],
                     [
                         'text' => 'Catégories',
                         'route' => ['admin.articleCategorie.index'],
-                        'url_prefix' => '/article/categorie*'
-                    ]
-                ]
-            ]
-        ]
+                        'url_prefix' => '/article/categorie*',
+                    ],
+                ],
+            ],
+        ],
     ],
     [
         'title' => 'Configuration',
@@ -67,8 +67,8 @@ return [
                         'url_prefix' => '/log*',
                         'gate' => 'show-logs',
                     ],
-                ]
+                ],
             ],
-        ]
+        ],
     ],
 ];

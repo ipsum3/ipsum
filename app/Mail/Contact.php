@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -33,6 +32,6 @@ class Contact extends Mailable
         return $this->markdown('contact.mail')
             ->from($this->contact->email, $this->contact->nom)
             ->to(config('settings.contact_email'), config('settings.nom_site'))
-            ->subject('Contact site Internet ' . config('settings.nom_site'));
+            ->subject('Contact site Internet '.config('settings.nom_site'));
     }
 }

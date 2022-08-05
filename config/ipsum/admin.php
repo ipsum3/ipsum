@@ -13,18 +13,16 @@ return [
         'adminAuth',
     ],
 
-
-    'roles' => array(
+    'roles' => [
         '1' => 'Super administrateur',
         '2' => 'Administrateur',
         '3' => 'Éditeur',
-    ),
+    ],
 
-
-    'acces' => array(
+    'acces' => [
         'article' => 'Article',
         'media' => 'Médias',
         'parametres' => 'Paramètres',
-    ),
+    ],
 
 ];

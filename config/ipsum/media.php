@@ -9,7 +9,7 @@ return [
     'types' => [
         'image' => [
             'type' => 'image',
-            'mimes' => ['jpeg', 'jpg','png','bmp','gif'],
+            'mimes' => ['jpeg', 'jpg', 'png', 'bmp', 'gif'],
         ],
         'document' => [
             'type' => 'document',
@@ -30,6 +30,5 @@ return [
         '300' => 'Moyenne',
         '1200' => 'Grande',
     ],
-    
 
 ];

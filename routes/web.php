@@ -14,12 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([],
-    function() {
-
+    function () {
         Route::get('/', [
-            \App\Http\Controllers\ArticleController::class, 'home'
+            \App\Http\Controllers\ArticleController::class, 'home',
         ])->name('home');
-
 
         Route::controller(\App\Http\Controllers\ContactController::class)->prefix('contact')->name('contact.')->group(
             function () {
@@ -37,10 +35,9 @@ Route::group([],
             }
         );
 
-
         // Catch all route : à mettre en dernier
         Route::get('{article:slug}', [
-            \App\Http\Controllers\ArticleController::class, 'index'
+            \App\Http\Controllers\ArticleController::class, 'index',
         ])->name('article');
     }
 );

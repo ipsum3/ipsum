@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-
 Route::controller(\App\Http\Controllers\MarqueController::class)->prefix('marque')->name('admin.marque.')->group(
     function () {
         Route::get('', 'index')->name('index');
@@ -11,7 +10,5 @@ Route::controller(\App\Http\Controllers\MarqueController::class)->prefix('marque
         Route::any('{marque}/destroy', 'destroy')->name('destroy');
         Route::put('{marque}', 'update')->name('update');
         Route::get('{marque}/edit', 'edit')->name('edit');
-
     }
 );
-

@@ -1,19 +1,15 @@
 <?php
+
 namespace App\Http\Controllers;
 
-
-use Ipsum\Article\app\Models\Categorie;
 use Ipsum\Article\app\Models\Article;
-
 
 class ArticleController extends Controller
 {
-
     public function index(Article $article)
     {
-         return view('article.show', compact('article'));
+        return view('article.show', compact('article'));
     }
-
 
     public function blogIndex()
     {
@@ -30,12 +26,10 @@ class ArticleController extends Controller
         return view('article.blog.show', compact('article'));
     }
 
-
     public function home()
     {
         $article = Article::where('nom', 'Accueil')->firstOrFail();
 
         return view('home', compact('article'));
     }
-
 }

@@ -28,8 +28,7 @@ class SendContact extends FormRequest
             'nom' => 'required',
             'email' => ['required', 'email', new NotSpammeur()],
             'telephone' => 'nullable|min:10',
-            'texte' => 'required'
+            'texte' => 'required',
         ];
     }
-
 }
