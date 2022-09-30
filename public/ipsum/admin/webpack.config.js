@@ -2,34 +2,29 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const FileIncludeWebpackPlugin = require('file-include-webpack-plugin')
 const WebpackNotifierPlugin = require('webpack-notifier')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 const isProduction = process.env.NODE_ENV === 'production'
 const ASSET_PATH = process.env.ASSET_PATH || '../dist/'
 
 let config = {
+    resolve: {
+        modules: [
+            path.resolve('./node_modules'),
+            path.resolve('../../../public/node_modules')
+        ]
+    },
     mode: process.env.NODE_ENV,
     entry: {
         main: [
             // css before js
             './src/scss/style.scss',
             './src/js/index.js'
-        ],
-        tinymce: [
-            './src/js/tinymce.js'
-        ],
-        uppy: [
-            './src/scss/uppy.scss',
-            './src/js/uppy.js'
         ]
     },
     output: {
-        path: path.resolve(__dirname, (isDevelopment ? 'tests/' : '') + 'dist'),
-        // path: path.resolve(__dirname, (isDevelopment ? '' : '') + 'dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
         publicPath: ASSET_PATH
     },
@@ -92,29 +87,14 @@ let config = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: true
+                            sourceMap: true,
+                            includePaths: [
+                                '../../../public/ipsum/admin/node_modules/'
+                            ]
                         }
                     }
                 ],
                 exclude: /node_modules/
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                    'file-loader',
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            disable: isDevelopment
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/,
-                use: [
-                    'file-loader'
-                ]
             }
         ]
     },
@@ -123,12 +103,7 @@ let config = {
             filename: '[name].css',
             chunkFilename: '[id].css'
         }),
-        new FileIncludeWebpackPlugin({
-            source: './src/html/pages',
-            destination: '../examples'
-        }),
-        new WebpackNotifierPlugin(),
-        new BundleAnalyzerPlugin()
+        new WebpackNotifierPlugin()
     ],
     optimization: {
         minimize: isProduction,
@@ -148,10 +123,6 @@ let config = {
             })
         ]
     }
-}
-
-if (isProduction) {
-    config.plugins.push(new CleanWebpackPlugin())
 }
 
 module.exports = config

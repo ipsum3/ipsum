@@ -7,6 +7,8 @@
 `npm run dev`
 `npm run build`
 
-## Docs
+## Notes
 
-https://ipsum3.github.io/admin-assets/examples/
+Pour mettre à jour les assets de l'admin, il faut copier le dossier dist à partir de ipsum3/admin-assets
+
+Dans le cas de modif des fichier js et scss bien penser à mettre à jour les fichiers package si besoin
