@@ -51,7 +51,10 @@ let config = {
                         }
                     },
                     {
-                        loader: 'eslint-loader'
+                        loader: 'eslint-loader',
+                        options: {
+                            fix: true
+                        }
                     }
                 ]
             },

@@ -33,7 +33,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::middleware(['web', 'site'])
+                ->prefix('{locale?}')
+                /*->whereIn('locale', array_keys( config('ipsum.translate.locales') ))*/
                 ->group(base_path('routes/web.php'));
 
             Route::middleware(['web'])
