@@ -30,7 +30,8 @@ class Contact extends Mailable
     public function build()
     {
         return $this->markdown('contact.mail')
-            ->from($this->contact->email, $this->contact->nom)
+            ->from(config('settings.contact_email'), config('settings.nom_site'))
+            ->replyTo($this->contact->email, $this->contact->nom)
             ->to(config('settings.contact_email'), config('settings.nom_site'))
             ->subject('Contact site Internet '.config('settings.nom_site'));
     }
