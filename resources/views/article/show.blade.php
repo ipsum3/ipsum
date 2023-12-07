@@ -21,7 +21,7 @@
                             @if ($article->extrait)
                                 <p class="headline">{!! $article->extrait !!}</p>
                             @endif
-                            {!! $article->texte !!}
+                            {!! $article->texte_with_blocs !!}
                         </div><!-- .wysiwyg-wp -->
                     </div><!-- /.col-lg-10 -->
                 </div><!-- /.row -->

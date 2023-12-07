@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Ipsum\Core\app\Rules\NoLink;
 use Ipsum\Core\app\Rules\NotSpammeur;
 
 class SendContact extends FormRequest
@@ -26,7 +27,7 @@ class SendContact extends FormRequest
     {
         return [
             'nom' => 'required',
-            'email' => ['required', 'email', new NotSpammeur()],
+            'email' => ['required', 'email', new NotSpammeur(), new NoLink()],
             'telephone' => 'nullable|min:10',
             'texte' => 'required',
         ];

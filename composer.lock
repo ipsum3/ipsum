@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "869b5d4e1c5b3b00b1b5831704727981",
+    "content-hash": "81e206576a704341ae6c618dda1be873",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2123,14 +2123,21 @@
         {
             "name": "ipsum3/article",
             "version": "2022.x-dev",
-            "dist": {
-                "type": "path",
-                "url": "../ipsum3-article",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ipsum3/article.git",
                 "reference": "1bbeeb9fa542e2d3fc99663ebf1dcc76d5c61e02"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ipsum3/article/zipball/1bbeeb9fa542e2d3fc99663ebf1dcc76d5c61e02",
+                "reference": "1bbeeb9fa542e2d3fc99663ebf1dcc76d5c61e02",
+                "shasum": ""
             },
             "require": {
                 "php": "^8.0.2"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -2153,17 +2160,25 @@
                     "email": "postmaster@b1nj.fr"
                 }
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/ipsum3/article/tree/2022",
+                "issues": "https://github.com/ipsum3/article/issues"
+            },
+            "time": "2023-11-20T21:17:25+00:00"
         },
         {
             "name": "ipsum3/core",
             "version": "2022.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ipsum3/core.git",
+                "reference": "02ea0d664c31ddae33bec08df79993dab08718c0"
+            },
             "dist": {
-                "type": "path",
-                "url": "../ipsum-core",
-                "reference": "801ae4b4931bacd03b736669113dfff7b43c6b5b"
+                "type": "zip",
+                "url": "https://api.github.com/repos/ipsum3/core/zipball/02ea0d664c31ddae33bec08df79993dab08718c0",
+                "reference": "02ea0d664c31ddae33bec08df79993dab08718c0",
+                "shasum": ""
             },
             "require": {
                 "barryvdh/laravel-debugbar": "^3.6",
@@ -2171,10 +2186,7 @@
                 "php": "^8.0.2",
                 "prologue/alerts": "^1.0"
             },
-            "require-dev": {
-                "barryvdh/laravel-debugbar": "^3.6",
-                "barryvdh/laravel-ide-helper": "^2.12"
-            },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -2197,9 +2209,11 @@
                     "email": "postmaster@b1nj.fr"
                 }
             ],
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/ipsum3/core/tree/2022",
+                "issues": "https://github.com/ipsum3/core/issues"
+            },
+            "time": "2023-11-29T20:12:43+00:00"
         },
         {
             "name": "ipsum3/media",
@@ -10311,5 +10325,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
