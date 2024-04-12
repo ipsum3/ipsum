@@ -2083,12 +2083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ipsum3/admin-assets.git",
-                "reference": "50a8295d4043a97ef7044f2515a565cf2754fd93"
+                "reference": "99fdb4577dfbdf90c44c9b339a8fbabd75a6976a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ipsum3/admin-assets/zipball/50a8295d4043a97ef7044f2515a565cf2754fd93",
-                "reference": "50a8295d4043a97ef7044f2515a565cf2754fd93",
+                "url": "https://api.github.com/repos/ipsum3/admin-assets/zipball/99fdb4577dfbdf90c44c9b339a8fbabd75a6976a",
+                "reference": "99fdb4577dfbdf90c44c9b339a8fbabd75a6976a",
                 "shasum": ""
             },
             "default-branch": true,
@@ -2118,7 +2118,7 @@
                 "source": "https://github.com/ipsum3/admin-assets/tree/master",
                 "issues": "https://github.com/ipsum3/admin-assets/issues"
             },
-            "time": "2023-11-20T19:03:28+00:00"
+            "time": "2024-04-12T15:39:43+00:00"
         },
         {
             "name": "ipsum3/article",
@@ -10325,5 +10325,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }
